@@ -20,3 +20,11 @@ Alternatively create manually the list (one playlist url per line, no
 comments, no empty lines because I'm not doing any input checks - as
 this is a homebrew project)
 
+Requirements
+============
+It requires mplayer and python. When I add button support it will probably be hardcoded to the Pi
+
+*WARNING*
+=========
+
+For now it doesn't work - i.e. untill I build the buttons it will play 5s/stream and jump to the next one
