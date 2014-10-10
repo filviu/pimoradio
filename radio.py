@@ -9,52 +9,55 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(23 , GPIO.IN) # prev
 GPIO.setup(24 , GPIO.IN) # next
 
-statarr = []
+statArr = []
 
 with open("stations.txt") as stat_file:
-    statarr = stat_file.readlines()
+    statArr = stat_file.readlines()
+maxstat = len(statArr)-1 # reads with one extra why?
 
-maxstat = len(statarr)-1 # reads whin one extra
 if os.path.isfile("stations.pos"):
-    pos_file = open("stations.pos") 
-    statStr = pos_file.read()
-    stat = int(statStr)
+    posFile = open("stations.pos") 
+    statStr = posFile.read()
+    statPos = int(statStr)
 else:
-    stat = 0
-print stat
+    statPos = 0
+
 # play something on start
-print statarr[stat]
-command = 'mplayer -really-quiet -slave -playlist '+statarr[stat]
+print statArr[statPos]
+os.system('./say-station.sh '+statArr[statPos])
+command = 'mplayer -really-quiet -slave -playlist '+statArr[statPos]
 mp = subprocess.Popen(command.split(),stdin=PIPE,stderr=subprocess.STDOUT, stdout=PIPE)
 a = mp.poll()
 
 while True:
     if GPIO.input(23)==1 and GPIO.input(24)==0:
-	stat-=1
-	if stat == -1 :
-		stat=maxstat-1 			# empty line on last line
-	print statarr[stat]
+	statPos-=1
+	if statPos == -1 :
+		statPos=maxstat-1 			# empty line on last line
+	print statArr[statPos]
 	if mp.poll() is None: 			# check if the process didn't crash in the mean time
 	     mp.stdin.write('quit \n')
-	command = 'mplayer -really-quiet -slave -playlist '+statarr[stat]
+	os.system('./say-station.sh '+statArr[statPos])
+	command = 'mplayer -really-quiet -slave -playlist '+statArr[statPos]
 	mp = subprocess.Popen(command.split(),stdin=PIPE,stderr=subprocess.STDOUT, stdout=PIPE)
-	pos_file = open('stations.pos', 'w')
-	pos_file.write(str(stat))
-	pos_file.close()
+	posFile = open('stations.pos', 'w')
+	posFile.write(str(statPos))
+	posFile.close()
 	sleep(0.5) # ignore long press
 
     if GPIO.input(24)==1 and GPIO.input(23)==0:
-	stat+=1
-	if stat == maxstat :
-		stat=0
-	print statarr[stat]
+	statPos+=1
+	if statPos == maxstat :
+		statPos=0
+	print statArr[statPos]
 	if mp.poll() is None:
 	     mp.stdin.write('quit \n')
-	command = 'mplayer -really-quiet -slave -playlist '+statarr[stat]
+	os.system('./say-station.sh '+statArr[statPos])
+	command = 'mplayer -really-quiet -slave -playlist '+statArr[statPos]
 	mp = subprocess.Popen(command.split(),stdin=PIPE,stderr=subprocess.STDOUT, stdout=PIPE)
-	pos_file = open('stations.pos', 'w')
-	pos_file.write(str(stat))
-	pos_file.close()
+	posFile = open('stations.pos', 'w')
+	posFile.write(str(statPos))
+	posFile.close()
 	sleep(0.5) # ugly way to ignore longer presses
     if GPIO.input(24)==1 and GPIO.input(23)==1:
 	sleep(1)

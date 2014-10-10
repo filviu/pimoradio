@@ -2,7 +2,10 @@
 # Originally by Dan Fountain
 # modifcations by silviu vulcan
 
-INPUT=$*
+# this might need customizing if you are not using SkyFm
+INPUT=$(curl -s $1 | grep -m 1 Title | awk -F= '{print $2}' | sed 's/RadioTunes\ \-\ //')
+
+#INPUT=$*
 STRINGNUM=0
 
 ary=($INPUT)
