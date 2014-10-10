@@ -9,6 +9,8 @@ plugins for buttons, lcd (if any) and I wanted to try my hand at python.
 
 Eventually I will add schematics for driving a few leds and buttons.
 
+Heavily based on http://www.linuxuser.co.uk/tutorials/raspberry-pi-portable-internet-radio
+
 Usage
 =====
 
@@ -22,9 +24,11 @@ this is a homebrew project)
 
 Requirements
 ============
-It requires mplayer and python. When I add button support it will probably be hardcoded to the Pi
+It requires mplayer and python. Button support is hardcoded to GPIO 23 and 24 (prev,next station in list)
 
 *WARNING*
 =========
 
-For now it doesn't work - i.e. untill I build the buttons it will play 5s/stream and jump to the next one
+* ~~For now it doesn't work - i.e. untill I build the buttons it will play 5s/stream and jump to the next one~~
+* very rough and this from an amateur coder and python begginer
+* as stated above the stations list is not checked in any way, and doesn't support comments, empty lines, etc. but it does *require* one empty line as the last line (if not your last station will never be reached)
