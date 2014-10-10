@@ -15,8 +15,13 @@ with open("stations.txt") as stat_file:
     statarr = stat_file.readlines()
 
 maxstat = len(statarr)-1 # reads whin one extra
-stat = 0
-
+if os.path.isfile("stations.pos"):
+    pos_file = open("stations.pos") 
+    statStr = pos_file.read()
+    stat = int(statStr)
+else:
+    stat = 0
+print stat
 # play something on start
 print statarr[stat]
 command = 'mplayer -really-quiet -slave -playlist '+statarr[stat]
@@ -33,6 +38,9 @@ while True:
 	     mp.stdin.write('quit \n')
 	command = 'mplayer -really-quiet -slave -playlist '+statarr[stat]
 	mp = subprocess.Popen(command.split(),stdin=PIPE,stderr=subprocess.STDOUT, stdout=PIPE)
+	pos_file = open('stations.pos', 'w')
+	pos_file.write(str(stat))
+	pos_file.close()
 	sleep(0.5) # ignore long press
 
     if GPIO.input(24)==1 and GPIO.input(23)==0:
@@ -44,11 +52,14 @@ while True:
 	     mp.stdin.write('quit \n')
 	command = 'mplayer -really-quiet -slave -playlist '+statarr[stat]
 	mp = subprocess.Popen(command.split(),stdin=PIPE,stderr=subprocess.STDOUT, stdout=PIPE)
+	pos_file = open('stations.pos', 'w')
+	pos_file.write(str(stat))
+	pos_file.close()
 	sleep(0.5) # ugly way to ignore longer presses
     if GPIO.input(24)==1 and GPIO.input(23)==1:
 	sleep(1)
 	if GPIO.input(24)==1 and GPIO.input(23)==1:
-	    os.system("poweroff")
-	    raise SystemExit(0)
+	    if mp.poll() is None:
+		 mp.stdin.write('quit \n')
     sleep(0.1);
 GPIO.cleanup()
