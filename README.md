@@ -13,6 +13,7 @@ Heavily based on http://www.linuxuser.co.uk/tutorials/raspberry-pi-portable-inte
 
 Usage
 =====
+Have radio.py start as root via some means (sudo from cron, rc.local, etc.) and preferably using a script to respawn it ~~when~~ if it crashes
 
 Use getskylists.sh > stations.txt to generate a list of stations from
 sky.fm (could stop working at any moment). This uses the free stations
